@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     
-    <form class="form">
+    <form class="form" @submit.prevent>
       <h4 class="title">Create Post</h4>
       <input 
         v-model="this.title"
@@ -50,7 +50,16 @@
       }
     },
     methods: {
-
+      createPost() {
+        const newPost = {
+          id: Date.now(),
+          title: this.title,
+          body: this.body,
+        }
+        this.posts.push(newPost)
+        this.title = ""
+        this.body = ""
+      },
     }, 
   }
 </script>

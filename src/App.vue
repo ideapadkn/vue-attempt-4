@@ -3,13 +3,31 @@
     
     <form class="form">
       <h4 class="title">Create Post</h4>
-      <input class="input" type="text" placeholder="Name">
-      <input class="input" type="text" placeholder="Description">
-      <button class="btn">Create</button>
+      <input 
+        v-model="this.title"
+        class="input" 
+        type="text" 
+        placeholder="Name"
+      >
+      <input 
+        v-model="this.body"
+        class="input" 
+        type="text" 
+        placeholder="Description"
+      >
+      <button 
+        class="btn"
+        @click="createPost"
+      >
+        Create
+      </button>
     </form>
 
 
-    <div class="post" v-for="post in posts">
+    <div 
+      class="post" 
+      v-for="post in posts"
+    >
       <div><strong>Name:</strong> {{ post.title }}</div>
       <div><strong>Description:</strong> {{ post.body }}</div>
     </div>
@@ -26,7 +44,9 @@
           {id: 2, title: "JavaScript 2", body: "Description"},
           {id: 3, title: "JavaScript 3", body: "Description"},
           {id: 4, title: "JavaScript 4", body: "Description"},
-        ]
+        ],
+        title: '',
+        body: '',
       }
     },
     methods: {
@@ -70,6 +90,7 @@
   background-color: transparent;
   transition: all .3s;
   cursor: pointer;
+  color: teal;
 }
 .btn:hover {
   background-color: teal;

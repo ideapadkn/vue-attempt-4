@@ -1,0 +1,32 @@
+<template>
+  <div 
+      class="post" 
+  >
+    <div>
+      <div><strong>Name:</strong> {{ post.title }}</div>
+      <div><strong>Description:</strong> {{ post.body }}</div>
+    </div>
+    <div class="post__btns">
+      <button>Delete</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: {
+      post: {
+        type: Object,
+        required: true,
+      }
+    }
+  }
+</script>
+
+<style scoped>
+.post {
+  border: 2px solid teal;
+  padding: 15px;
+  margin-top: 15px;
+}
+</style>

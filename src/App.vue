@@ -1,6 +1,8 @@
 <template>
   <div class="app">
-    <post-form />
+    <post-form 
+      @create="createPost"
+    />
     <post-list
       :posts="posts"    
     />
@@ -26,8 +28,8 @@ import PostList from "@/components/PostList"
       }
     },
     methods: {
-      createPost() {
-        
+      createPost(post) {
+        this.posts.push(post);
       },
     }, 
   }

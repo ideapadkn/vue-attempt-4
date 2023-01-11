@@ -13,7 +13,7 @@
       type="text" 
       placeholder="Description"
     />
-    <my-button 
+    <my-button
       class="btn"
       style="margin-top: 15px;"
       @click="createPost"

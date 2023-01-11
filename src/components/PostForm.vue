@@ -13,17 +13,22 @@
       type="text" 
       placeholder="Description"
     >
-    <button 
+    <my-button 
       class="btn"
+      style="margin-top: 15px;"
       @click="createPost"
     >
       Create
-    </button>
+    </my-button>
   </form>   
 </template>
 
 <script>
+import MyButton from '@/components/UI/MyButton';
   export default {
+    components: {
+      MyButton
+    },
     data() {
       return {
         post: {
@@ -58,19 +63,5 @@
 }
 .input:focus {
   outline: none;
-}
-.btn {
-  align-self: flex-end;
-  padding: 10px 15px;
-  border: 1px solid teal;
-  margin-top: 15px;
-  background-color: transparent;
-  transition: all .3s;
-  cursor: pointer;
-  color: teal;
-}
-.btn:hover {
-  background-color: teal;
-  color: #fff;
 }
 </style>

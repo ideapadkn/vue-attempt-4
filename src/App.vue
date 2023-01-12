@@ -1,6 +1,10 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
+    <my-input 
+      v-model="searchQuery"
+      placeholder="Search"
+    />
     <div class="app__btns">
       <my-button
         @click="showDialog"
@@ -20,7 +24,7 @@
     </my-dialog>
     
     <post-list
-      :posts="sortedPosts" 
+      :posts="sortedAndSearchedPosts" 
       @remove="removePost"
     />
   </div>
@@ -41,6 +45,7 @@ import axios from 'axios'
         dialogVisible: false,
         isPostsLoading: false,
         selectedSort: '',
+        searchQuery: '',
         sortOptions: [
           {value: 'title', name: 'name'},
           {value: 'body', name: 'description'},
@@ -77,14 +82,17 @@ import axios from 'axios'
       sortedPosts() {
         return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
     },  
-    watch: {
-      // selectedSort(newValue) {
-      //   this.posts.sort((post1, post2) => {
-      //     return post1[newValue]?.localeCompare(post2[newValue]);
-      //   })
-      },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     },
-  }
+            // watch: {
+            //   // selectedSort(newValue) {
+            //   //   this.posts.sort((post1, post2) => {
+            //   //     return post1[newValue]?.localeCompare(post2[newValue]);
+            //   //   })
+            //   },
+    },
+    }
 </script>
 
 <style>

@@ -1,12 +1,18 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
-    <my-button
-      @click="showDialog"
-      style="margin: 15px 0;"
-    >
-      Create
-    </my-button>
+    <div class="app__btns">
+      <my-button
+        @click="showDialog"
+      >
+        Create
+      </my-button>
+      <my-select 
+        v-model="selectedSort"
+        :options="sortOptions"
+      />
+    </div>
+    
     <my-dialog v-model:show="dialogVisible">
       <post-form 
       @create="createPost"
@@ -38,6 +44,11 @@ import axios from 'axios'
         posts: [],
         dialogVisible: false,
         isPostsLoading: false,
+        selectedSort: '',
+        sortOptions: [
+          {value: 'title', name: 'name'},
+          {value: 'body', name: 'description'},
+        ]
       }
     },
     methods: {
@@ -46,23 +57,20 @@ import axios from 'axios'
         this.dialogVisible = false;
       },
       removePost(post) {
-        this.posts = this.posts.filter(p => p.id !== post.id)
+        this.posts = this.posts.filter(p => p.id !== post.id);
       },
       showDialog() {
         this.dialogVisible = true;
       },
       async fetchPosts() {
         try {
-          this.isPostsLoading = true;
-          setTimeout( async () => {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=10`);
-            this.posts = response.data;
-            this.isPostsLoading = false;
-          }, 1000)
-        } catch (e) {
-          alert('error')
-        } finally {
+          const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=10`);
+          this.posts = response.data;
           
+        } catch (e) {
+          alert('error');
+        } finally {
+          this.isPostsLoading = false;
         }
       },
     },
@@ -78,9 +86,13 @@ import axios from 'axios'
   padding: 0;
   box-sizing: border-box;
 }
-
 .app {
   padding: 20px;
+}
+.app__btns {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 

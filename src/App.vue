@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <h1>Posts</h1>
+    <h1 class="title">Posts</h1>
     <my-input 
       v-model="searchQuery"
       placeholder="Search"
@@ -29,7 +29,10 @@
       v-if="!isPostsLoading"
     />
     <div v-else >Loading..</div>
-    <div class="page__wrapper">
+    <div ref="observer" class="observer">
+      
+    </div>
+    <!-- <div class="page__wrapper">
       <div 
         class="page"
         v-for="pageNumber in totalPages"
@@ -41,7 +44,7 @@
       > 
         {{ pageNumber }}
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -81,9 +84,9 @@ import axios from 'axios'
       showDialog() {
         this.dialogVisible = true;
       },
-      changePage(pageNumber) {
-        this.page = pageNumber;
-      },  
+      // changePage(pageNumber) {
+      //   this.page = pageNumber;
+      // },  
       async fetchPosts() {
         try {
           const response = await axios.get(`https://jsonplaceholder.typicode.com/posts`, {
@@ -94,16 +97,43 @@ import axios from 'axios'
           });
           this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
           this.posts = response.data;
-          
         } catch (e) {
           alert('error');
         } finally {
           this.isPostsLoading = false;
         }
       },
+      async loadMorePosts() {
+        try {
+          this.page += 1;
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            }
+          });
+          this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+          this.posts = [...this.posts, ...response.data];
+        } catch (e) {
+          alert('error');
+        } finally {
+        }
+      },
     },
     mounted() {
       this.fetchPosts();
+      console.log(this.$refs.observer)
+      let options = {
+        rootMargin: '0px',
+        threshold: 1.0
+      };
+      let callback = (entries, observer) => {
+        if(entries[0].isIntersecting) {
+          this.loadMorePosts()
+        }
+      };
+      let observer = new IntersectionObserver(callback, options);
+      observer.observe(this.$refs.observer);
     },   
     computed: {
       sortedPosts() {
@@ -114,9 +144,9 @@ import axios from 'axios'
       },
     },
     watch: {
-      page() {
-        this.fetchPosts()
-      }
+      // page() {
+      //   this.fetchPosts()
+      // }
     }
   }
 </script>
@@ -126,6 +156,9 @@ import axios from 'axios'
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.title {
+  text-align: center;
 }
 .app {
   padding: 20px;
@@ -137,14 +170,22 @@ import axios from 'axios'
 }
 .page__wrapper {
    display: flex;
+   justify-content: center;
    margin-top: 15px;
 }
 .page {
   border: 1px solid #000;
-  padding: 10px;
+  padding: 5px 10px;
+  margin: 0 5px;
 }
 .current-page {
   border: 2px solid teal;
+  transform: translateY(-3px);
+}
+.observer {
+  height: 30px;
+  background-color: teal;
+  margin-top: 15px;
 }
 </style>
 
